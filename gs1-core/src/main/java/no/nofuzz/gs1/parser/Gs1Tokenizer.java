@@ -9,6 +9,7 @@ import java.util.List;
 public class Gs1Tokenizer implements Tokenizer {
 
     private static final char FNC1 = 29;
+    private static final int MAX_INPUT_LENGTH = 10_000;
 
     private final AiRegistry registry;
     private final Gs1ComplianceMode mode;
@@ -24,6 +25,14 @@ public class Gs1Tokenizer implements Tokenizer {
             throw new Gs1ParseException(
                     Gs1ErrorCode.INVALID_FORMAT,
                     "Input is empty",
+                    0
+            );
+        }
+
+        if (input.length() > MAX_INPUT_LENGTH) {
+            throw new Gs1ParseException(
+                    Gs1ErrorCode.INVALID_FORMAT,
+                    "Input exceeds maximum length of " + MAX_INPUT_LENGTH + " characters",
                     0
             );
         }
@@ -126,8 +135,29 @@ public class Gs1Tokenizer implements Tokenizer {
             i += ai.length();
             int start = i;
 
-            // For variable-length AIs without FNC1, detect potential AI codes in the value
-            if (aiDef.variableLength()) {
+            // Handle based on AI type
+            if (aiDef.fixedLength() != null) {
+                // Fixed-length AI - read exactly fixedLength characters
+                int requiredLength = aiDef.fixedLength();
+                int endPos = start + requiredLength;
+
+                if (endPos > input.length()) {
+                    throw new Gs1ParseException(
+                            Gs1ErrorCode.INVALID_FORMAT,
+                            "Truncated value for AI " + ai + ": expected " + requiredLength + " characters, got " + (input.length() - start),
+                            start
+                    );
+                }
+
+                tokens.add(new Gs1Token(ai, input.substring(start, endPos), start));
+                i = endPos;
+
+                // Skip optional FNC1 separator after fixed-length field
+                if (i < input.length() && input.charAt(i) == FNC1) {
+                    i++;
+                }
+            } else {
+                // Variable-length AI - detect potential AI codes in the value
                 int potentialAiPos = -1;
                 while (i < input.length() && input.charAt(i) != FNC1) {
                     // Check if we encounter a potential AI code
@@ -147,27 +177,6 @@ public class Gs1Tokenizer implements Tokenizer {
                             potentialAiPos
                     );
                 }
-
-                if (start == i) {
-                    throw new Gs1ParseException(
-                            Gs1ErrorCode.INVALID_FORMAT,
-                            "Empty value for AI " + ai,
-                            start
-                    );
-                }
-
-                tokens.add(new Gs1Token(ai, input.substring(start, i), start));
-
-                if (terminatedByFnc1) {
-                    i++;
-                }
-            } else {
-                // Fixed-length AI - read exact number of characters
-                while (i < input.length() && input.charAt(i) != FNC1) {
-                    i++;
-                }
-
-                boolean terminatedByFnc1 = i < input.length() && input.charAt(i) == FNC1;
 
                 if (start == i) {
                     throw new Gs1ParseException(

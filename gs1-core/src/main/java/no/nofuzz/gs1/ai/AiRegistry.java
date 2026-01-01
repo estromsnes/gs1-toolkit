@@ -14,4 +14,8 @@ public class AiRegistry {
     public Optional<ApplicationIdentifier> find(String ai) {
         return Optional.ofNullable(registry.get(ai));
     }
+
+    public Map<String, ApplicationIdentifier> asMap() {
+        return registry;
+    }
 }
