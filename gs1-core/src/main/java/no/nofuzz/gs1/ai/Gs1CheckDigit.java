@@ -14,8 +14,8 @@ package no.nofuzz.gs1.ai;
  * <pre>
  * Digits (excluding check):  0 9 5 0 1 1 0 1 5 3 0 0 0
  * Weights (right to left):   1 3 1 3 1 3 1 3 1 3 1 3 1
- * Products:                  0+27+5+0+1+3+0+3+5+9+0+0+0 = 53
- * Check digit: (10 - (53 % 10)) % 10 = 7 (but actual is 3)
+ * Products:                  0+27+5+0+1+3+0+3+5+9+0+0+0 = 57
+ * Check digit: (10 - (57 % 10)) % 10 = (10 - 7) % 10 = 3 ✓
  * </pre>
  */
 public final class Gs1CheckDigit {
