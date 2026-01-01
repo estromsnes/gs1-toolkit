@@ -138,4 +138,55 @@ class ValidationTest {
                 .isInstanceOf(Gs1ParseException.class)
                 .hasMessageContaining("Expected length 13");
     }
+
+    @Test
+    void strictModeValidatesGtinCheckDigit() {
+        // Valid GTIN with correct check digit
+        String validGtin = "(01)09501101530003";
+        Gs1Result result = strictParser.parse(validGtin);
+        assertThat(result.getOrThrow("01")).isEqualTo("09501101530003");
+    }
+
+    @Test
+    void strictModeRejectsInvalidGtinCheckDigit() {
+        // Invalid GTIN with wrong check digit (should be 3, not 4)
+        String invalidGtin = "(01)09501101530004";
+        assertThatThrownBy(() -> strictParser.parse(invalidGtin))
+                .isInstanceOf(Gs1ParseException.class)
+                .hasMessageContaining("Invalid check digit");
+    }
+
+    @Test
+    void lenientModeAllowsInvalidGtinCheckDigit() {
+        // LENIENT mode does not validate check digits
+        String invalidGtin = "(01)09501101530004";
+        Gs1Result result = parser.parse(invalidGtin);
+        assertThat(result.getOrThrow("01")).isEqualTo("09501101530004");
+    }
+
+    @Test
+    void strictModeValidatesGlnCheckDigit() {
+        // Valid GLN with correct check digit
+        String validGln = "(410)0614141123452";
+        Gs1Result result = strictParser.parse(validGln);
+        assertThat(result.getOrThrow("410")).isEqualTo("0614141123452");
+    }
+
+    @Test
+    void strictModeRejectsInvalidGlnCheckDigit() {
+        // Invalid GLN with wrong check digit (should be 2, not 3)
+        String invalidGln = "(410)0614141123453";
+        assertThatThrownBy(() -> strictParser.parse(invalidGln))
+                .isInstanceOf(Gs1ParseException.class)
+                .hasMessageContaining("Invalid check digit");
+    }
+
+    @Test
+    void strictModeValidatesMultipleCheckDigits() {
+        // Both GTIN and GLN with valid check digits
+        String input = "(01)09501101530003(410)0614141123452";
+        Gs1Result result = strictParser.parse(input);
+        assertThat(result.getOrThrow("01")).isEqualTo("09501101530003");
+        assertThat(result.getOrThrow("410")).isEqualTo("0614141123452");
+    }
 }

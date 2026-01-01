@@ -116,6 +116,7 @@ Built for developers tired of:
 | Variable AI without FNC1 (final) | ✅ Allowed | ✅ Allowed |
 | Variable AI without FNC1 (middle) | ❌ Detected & rejected | ❌ Rejected |
 | Max length validation | ⚠️ Warning only | ❌ Enforced |
+| Check digit validation (GTIN, GLN) | ⚠️ Not validated | ❌ Enforced |
 | Ambiguous input | ❌ Detected & rejected | ❌ Rejected |
 | **Best for** | Production systems | Compliance testing |
 
@@ -142,24 +143,28 @@ Suitable for:
 
 ### 📋 Supported Application Identifiers
 
-Currently supports common AIs:
-- **01**: GTIN (14 digits, fixed)
+Currently supports 13 common AIs:
+- **01**: GTIN (14 digits, fixed) - ✅ **Check digit validated in STRICT mode**
 - **10**: Batch/Lot Number (variable, max 20)
-- **11**: Production date
-- **13**: Packaging date
-- **15**: Best before date
-- **17**: Expiry Date (YYMMDD, fixed, parsed as `LocalDate`)
-- **20**: Product Variant
+- **11**: Production date (YYMMDD, parsed as `LocalDate`)
+- **13**: Packaging date (YYMMDD, parsed as `LocalDate`)
+- **15**: Best before date (YYMMDD, parsed as `LocalDate`)
+- **17**: Expiry Date (YYMMDD, parsed as `LocalDate`)
+- **20**: Product Variant (2 digits, fixed)
 - **21**: Serial Number (variable, max 20)
 - **30**: Count (variable, max 8, parsed as `Integer`)
-- **37**: Count of Trade Items
-- **400**: Customer Purchase Order
-- **410**: Ship to GLN
-- **411**: Bill to GLN
-- **420**: Ship To Postal Code
-- **710**: NHRN
+- **37**: Count of Trade Items (variable, max 8, parsed as `Integer`)
+- **400**: Customer Purchase Order (variable, max 30)
+- **410**: Ship to GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **411**: Bill to GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **420**: Ship To Postal Code (variable, max 20)
+- **710**: NHRN (variable, max 20)
 
-**Extensible:** Register custom AIs via `AiRegistry`
+**Check Digit Validation:**
+- In STRICT mode, GTIN (AI 01) and GLN (AI 410/411) check digits are validated using GS1 modulo-10 algorithm
+- In LENIENT mode, check digits are not validated (accepts scanner data as-is)
+
+**Extensible:** Register custom AIs via builder pattern
 
 ---
 
@@ -216,6 +221,11 @@ parser.parse("\u001D10BATCH17251231");        // ❌ Error
 
 // Enforces max length
 parser.parse("\u001D10" + "A".repeat(25) + "\u001D"); // ❌ Error: exceeds max 20
+
+// Validates check digits (GTIN, GLN)
+parser.parse("(01)09501101530003");  // ✅ OK - valid check digit (3)
+parser.parse("(01)09501101530004");  // ❌ Error: invalid check digit
+parser.parse("(410)0614141123452"); // ✅ OK - valid GLN check digit
 ```
 
 ### Error Handling
@@ -256,6 +266,7 @@ Gs1Parser parser = Gs1Parser.builder()
         10,                            // Max length
         true,                          // Variable length
         CharacterSet.ALPHANUMERIC,     // Character set
+        false,                         // No check digit validation
         v -> v.toUpperCase()           // Value parser
     ))
     .build();
@@ -272,8 +283,8 @@ Gs1Parser customParser = Gs1Parser.builder()
 ```java
 // Create custom AI registry from scratch
 AiRegistry custom = new AiRegistry(Map.of(
-    "01", new ApplicationIdentifier("01", 14, 14, false, CharacterSet.NUMERIC, v -> v),
-    "99", new ApplicationIdentifier("99", null, 10, true, CharacterSet.ALPHANUMERIC, v -> v.toUpperCase())
+    "01", new ApplicationIdentifier("01", 14, 14, false, CharacterSet.NUMERIC, true, v -> v),
+    "99", new ApplicationIdentifier("99", null, 10, true, CharacterSet.ALPHANUMERIC, false, v -> v.toUpperCase())
 ));
 
 Gs1Parser parser = new Gs1Parser(custom, Gs1ComplianceMode.LENIENT);

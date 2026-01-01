@@ -8,6 +8,7 @@ public record ApplicationIdentifier(
         Integer maxLength,
         boolean variableLength,
         CharacterSet characterSet,
+        boolean validateCheckDigit,
         Function<String, Object> valueParser
 ) {
 
@@ -27,6 +28,15 @@ public record ApplicationIdentifier(
 
         // Character set validation
         validateCharacterSet(raw);
+
+        // Check digit validation (only in STRICT mode)
+        if (strict && validateCheckDigit) {
+            if (!Gs1CheckDigit.validate(raw)) {
+                throw new IllegalArgumentException(
+                        "Invalid check digit for AI " + code + ": " + raw
+                );
+            }
+        }
 
         return valueParser.apply(raw);
     }
