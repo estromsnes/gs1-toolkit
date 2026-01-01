@@ -1,5 +1,9 @@
 # GS1 Toolkit
 
+[![Build and Test](https://github.com/estromsnes/gs1-toolkit/actions/workflows/build.yml/badge.svg)](https://github.com/estromsnes/gs1-toolkit/actions/workflows/build.yml)
+[![License](https://img.shields.io/badge/License-Dual-blue.svg)](LICENSE.txt)
+[![Java](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://www.java.com)
+
 > Parse, validate and understand GS1 barcodes - without losing your sanity.
 
 A battle-tested Java library for parsing GS1-128 and DataMatrix barcodes into structured, type-safe data.
