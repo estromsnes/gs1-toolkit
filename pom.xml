@@ -18,6 +18,7 @@
     <module>gs1-core</module>
     <module>gs1-cli</module>
 	<module>gs1-test</module>
+	<module>gs1-benchmark</module>
   </modules>
 
   <properties>

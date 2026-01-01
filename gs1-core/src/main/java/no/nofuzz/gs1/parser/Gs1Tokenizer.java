@@ -1,6 +1,6 @@
 package no.nofuzz.gs1.parser;
 
-import no.nofuzz.gs1.ai.AiRegistry;
+import no.nofuzz.gs1.ai.*;
 import no.nofuzz.gs1.exception.*;
 
 import java.util.ArrayList;
@@ -9,10 +9,13 @@ import java.util.List;
 public class Gs1Tokenizer implements Tokenizer {
 
     private static final char FNC1 = 29;
-    private final AiRegistry registry;
 
-    public Gs1Tokenizer(AiRegistry registry) {
+    private final AiRegistry registry;
+    private final Gs1ComplianceMode mode;
+
+    public Gs1Tokenizer(AiRegistry registry, Gs1ComplianceMode mode) {
         this.registry = registry;
+        this.mode = mode;
     }
 
     @Override
@@ -25,86 +28,37 @@ public class Gs1Tokenizer implements Tokenizer {
             );
         }
 
+        if (mode == Gs1ComplianceMode.STRICT && input.charAt(0) != FNC1) {
+            throw new Gs1ParseException(
+                    Gs1ErrorCode.INVALID_FORMAT,
+                    "GS1 DataMatrix must start with FNC1 in STRICT mode",
+                    0
+            );
+        }
+
         List<Gs1Token> tokens = new ArrayList<>();
-        int i = 0;
-        int length = input.length();
+        int i = (input.charAt(0) == FNC1) ? 1 : 0;
 
-        while (i < length) {
+        while (i < input.length()) {
 
-            // =========================
-            // GS1-128 style: (AI)value
-            // =========================
-            if (input.charAt(i) == '(') {
-                int end = input.indexOf(')', i);
-                if (end < 0) {
-                    throw new Gs1ParseException(
-                            Gs1ErrorCode.INVALID_FORMAT,
-                            "Missing ')' for AI starting at position " + i,
-                            i
-                    );
-                }
-
-                String ai = input.substring(i + 1, end);
-                int finalI = i;
-                registry.find(ai).orElseThrow(() ->
-                        new Gs1ParseException(
-                                Gs1ErrorCode.UNKNOWN_AI,
-                                "Unknown AI " + ai,
-                                finalI
-                        )
-                );
-
-                i = end + 1;
-                int start = i;
-
-                // Read until next '(' or end
-                while (i < length && input.charAt(i) != '(') {
-                    i++;
-                }
-
-                if (start == i) {
-                    throw new Gs1ParseException(
-                            Gs1ErrorCode.INVALID_FORMAT,
-                            "Empty value for AI " + ai,
-                            start
-                    );
-                }
-
-                tokens.add(new Gs1Token(ai, input.substring(start, i), start));
-                continue;
-            }
-
-            // ======================================
-            // GS1 DataMatrix style: AIvalue<FNC1>
-            // ======================================
-
-            // Must have at least 2 chars for AI
-            if (i + 2 > length) {
-                throw new Gs1ParseException(
-                        Gs1ErrorCode.INVALID_FORMAT,
-                        "Truncated AI at position " + i,
-                        i
-                );
-            }
-
-            String ai = input.substring(i, i + 2);
-
-            int finalI1 = i;
+            String ai = resolveAi(input, i);
+            int finalI = i;
             registry.find(ai).orElseThrow(() ->
                     new Gs1ParseException(
                             Gs1ErrorCode.UNKNOWN_AI,
                             "Unknown AI " + ai,
-                            finalI1
+                            finalI
                     )
             );
 
-            i += 2;
+            i += ai.length();
             int start = i;
 
-            // Read until FNC1 or end
-            while (i < length && input.charAt(i) != FNC1) {
+            while (i < input.length() && input.charAt(i) != FNC1) {
                 i++;
             }
+
+            boolean terminatedByFnc1 = i < input.length() && input.charAt(i) == FNC1;
 
             if (start == i) {
                 throw new Gs1ParseException(
@@ -116,8 +70,15 @@ public class Gs1Tokenizer implements Tokenizer {
 
             tokens.add(new Gs1Token(ai, input.substring(start, i), start));
 
-            // Skip FNC1 if present (but do NOT require it)
-            if (i < length && input.charAt(i) == FNC1) {
+            if (mode == Gs1ComplianceMode.STRICT && !terminatedByFnc1 && i < input.length()) {
+                throw new Gs1ParseException(
+                        Gs1ErrorCode.INVALID_FORMAT,
+                        "Missing FNC1 after variable-length AI " + ai,
+                        i
+                );
+            }
+
+            if (terminatedByFnc1) {
                 i++;
             }
         }
@@ -125,8 +86,19 @@ public class Gs1Tokenizer implements Tokenizer {
         return tokens;
     }
 
-
-    private Gs1ParseException error(String msg, int pos) {
-        return new Gs1ParseException(Gs1ErrorCode.INVALID_FORMAT, msg, pos);
+    private String resolveAi(String input, int pos) {
+        for (int len : new int[]{4, 3, 2}) {
+            if (pos + len <= input.length()) {
+                String candidate = input.substring(pos, pos + len);
+                if (registry.find(candidate).isPresent()) {
+                    return candidate;
+                }
+            }
+        }
+        throw new Gs1ParseException(
+                Gs1ErrorCode.INVALID_FORMAT,
+                "Unable to resolve AI at position " + pos,
+                pos
+        );
     }
 }

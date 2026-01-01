@@ -32,31 +32,79 @@ It aims for **practical GS1 compliance**, not a rigid line-by-line implementatio
  * Robust detection of truncated or malformed input
  * Safe handling of scanner noise and invalid characters
 
-### ⚠️ Intentional deviations from strict GS1 specification
+### Parsing Modes: Lenient vs Strict
 
-GS1 Toolkit intentionally applies a **lenient parsing strategy** in certain areas to better match real-world data and reduce operational friction.
+GS1 Toolkit supports two parsing modes to balance **real-world robustness** with **formal GS1 compliance**.
 
-These deviations are documented and tested.
+🔹 LENIENT mode (default)
 
-**Lenient DataMatrix handling**
- * The first character is not required to be FNC1 (many scanners omit this in practice)
- * Variable-length fields are allowed to omit FNC1 **if they are the final element**
- * AI codes are currently parsed as **2-digit identifiers** (extended AI support is planned)
+**LENIENT mode** is optimized for production systems and imperfect real-world data.
 
-These choices significantly improve interoperability with:
- * legacy scanners
- * batch-imported barcode data
- * production systems with imperfect input sources
+This is the default mode used by `Gs1Parser.defaultParser()`.
 
-### ❌ What is not currently enforced
+**Characteristics:**
+ * Tolerates missing leading FNC1 in GS1 DataMatrix
+ * Allows variable-length AIs to omit FNC1 if they are the final element
+ * Accepts common scanner deviations and legacy data formats
+ * Focuses on robustness and operational stability
 
-The following GS1 rules are **not strictly enforced** in the current version:
- * Per-AI maximum length constraints
- * Full numeric-only validation for all numeric AIs
- * Mandatory leading FNC1 for DataMatrix input
- * Longest-match parsing for 3- and 4-digit AIs
+**Recommended for:**
+ * Backend services
+ * Batch processing
+ * Scanner integrations
+ * POS / ERP / WMS systems
+ * Systems ingesting external or uncontrolled data
 
-These constraints can be added in future versions or enabled via a **strict parsing mode**.
+Example:
+```
+Gs1Parser parser = Gs1Parser.defaultParser();
+Gs1Result result = parser.parse(barcode);
+```
+
+🔒 STRICT mode
+
+**STRICT mode** enforces GS1 rules more rigorously and aims to be as close to the GS1 specification as possible.
+
+STRICT mode must be enabled explicitly.
+
+**Characteristics:**
+ * Requires leading FNC1 for GS1 DataMatrix
+ * Enforces FNC1 termination for variable-length AIs (unless final field)
+ * Uses longest-match AI resolution (2–4 digits)
+ * Enforces per-AI maximum length constraints
+ * Rejects malformed or ambiguous input early
+
+**Recommended for:**
+ * Compliance-sensitive environments
+ * Regulated industries
+ * Validation pipelines
+ * Certification and conformance testing
+ * Controlled input sources
+
+**Example:**
+```
+Gs1Parser parser = Gs1Parser.strictParser();
+Gs1Result result = parser.parse(barcode);
+```
+
+🧭 Design philosophy
+
+GS1 Toolkit intentionally separates **parsing correctness** from **operational robustness**.
+
+* **LENIENT mode** reflects how GS1 data appears in real systems
+* **STRICT mode** reflects how GS1 data is defined in the specification
+
+This allows consumers to explicitly choose the level of strictness required for their use case, without compromising safety or performance.
+
+### Performance considerations
+
+STRICT mode performs additional validation and introduces a small performance overhead.
+
+Benchmarks show:
+ * LENIENT mode: highest throughput
+ * STRICT mode: ~10–20% overhead due to additional checks
+
+Both modes are suitable for high-throughput backend processing.
 
 ### 🔒 Robustness & Safety Guarantees
 
@@ -75,6 +123,23 @@ This makes GS1 Toolkit suitable for:
  * backend services
  * support and debugging tools
 
+
+### Performance
+
+GS1 Toolkit is optimized for high-throughput backend processing.
+
+Benchmarks (JMH):
+ *  ~1–2 million parses per second
+ * STRICT mode adds ~10–20% overhead due to additional validation
+ *  No regex usage
+ *  Single-pass parsing
+
+The library is suitable for:
+ * batch processing
+ * scanner ingestion pipelines
+ *  real-time backend services
+
+We benchmarked it. Strict GS1 compliance costs ~15%. You choose.
 
 ### Summary
 

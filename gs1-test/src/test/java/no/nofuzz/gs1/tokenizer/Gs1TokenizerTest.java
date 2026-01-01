@@ -1,6 +1,7 @@
 package no.nofuzz.gs1.tokenizer;
 
 import no.nofuzz.gs1.ai.StandardAis;
+import no.nofuzz.gs1.parser.Gs1ComplianceMode;
 import no.nofuzz.gs1.parser.Gs1Tokenizer;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ class Gs1TokenizerTest {
 
     @Test
     void tokenizesParenthesisBasedInput() {
-        var tokenizer = new Gs1Tokenizer(StandardAis.defaultRegistry());
+        var tokenizer = new Gs1Tokenizer(StandardAis.defaultRegistry(), Gs1ComplianceMode.LENIENT);
 
         var tokens = tokenizer.tokenize("(01)09501101530003(10)ABC");
 
