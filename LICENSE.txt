@@ -1,19 +1,176 @@
-GS1 Toolkit – License
+GS1 TOOLKIT SOFTWARE LICENSE AGREEMENT
 
 Copyright (c) 2026 No Fuzz Strømsnes
+All rights reserved.
 
-This software is free to use for:
+================================================================================
+1. DEFINITIONS
+================================================================================
 
-Non-commercial use
-Open source projects
-Evaluation and testing
-Commercial use requires a paid license.
+"Software" means the GS1 Toolkit library, including all source code, binaries,
+documentation, and associated materials.
 
-Commercial use includes, but is not limited to:
+"Commercial Use" means any use of the Software in connection with:
+  (a) Production systems operated by for-profit organizations
+  (b) Internal business applications at for-profit companies
+  (c) Products or services that generate revenue
+  (d) Proprietary software distributed to customers
+  (e) Consulting or contracting work for commercial entities
 
-Use in proprietary software
-Use in internal business systems
-Use in paid services or products
-To obtain a commercial license, contact: estromsnes@gmail.com
+"Non-Commercial Use" means use of the Software for:
+  (a) Personal projects not generating revenue
+  (b) Educational purposes (students, teachers, academic research)
+  (c) Non-profit organizations with 501(c)(3) or equivalent status
+  (d) Open-source projects not used commercially
+  (e) Evaluation and proof-of-concept (limited to 60 days)
 
-Unauthorized commercial use is prohibited.
+"Commercial License" means a paid license agreement obtained from Licensor
+that grants rights to Commercial Use.
+
+================================================================================
+2. GRANT OF LICENSE
+================================================================================
+
+2.1 NON-COMMERCIAL USE
+Subject to the terms of this Agreement, Licensor grants you a free,
+non-exclusive, non-transferable license to use, copy, and modify the Software
+for Non-Commercial Use only.
+
+2.2 EVALUATION PERIOD
+You may use the Software for Commercial Use evaluation purposes for up to
+60 days without obtaining a Commercial License. After 60 days, you must either:
+  (a) Obtain a Commercial License, or
+  (b) Discontinue all Commercial Use
+
+2.3 COMMERCIAL USE REQUIRES LICENSE
+Any Commercial Use beyond the 60-day evaluation period requires a valid
+Commercial License. To obtain a Commercial License:
+
+  Contact: estromsnes@gmail.com
+  Subject: "GS1 Toolkit Business License"
+  Website: https://nofuzz.no/gs1-toolkit
+
+  Pricing: $1000/year per legal entity
+  (Volume discounts and multi-year agreements available)
+
+================================================================================
+3. RESTRICTIONS
+================================================================================
+
+You may NOT:
+  (a) Use the Software commercially without a valid Commercial License
+  (b) Remove or alter copyright notices or license terms
+  (c) Distribute the Software as part of a commercial product without a license
+  (d) Use the Software in ways that compete with Licensor's business
+  (e) Sublicense, rent, lease, or loan the Software to third parties
+  (f) Reverse engineer, decompile, or disassemble the Software (except as
+      permitted by applicable law)
+
+================================================================================
+4. OWNERSHIP
+================================================================================
+
+The Software is licensed, not sold. Licensor retains all right, title, and
+interest in and to the Software, including all intellectual property rights.
+
+================================================================================
+5. SUPPORT AND UPDATES
+================================================================================
+
+5.1 NON-COMMERCIAL USE
+No support or maintenance is provided for Non-Commercial Use. Updates are
+provided "as-is" with no guarantees.
+
+5.2 COMMERCIAL LICENSE HOLDERS
+Commercial License holders receive:
+  - Bug fixes and security updates
+  - Email support (24-48 hour response time)
+  - Access to new features and improvements
+  - Compliance documentation for audits
+
+================================================================================
+6. WARRANTY DISCLAIMER
+================================================================================
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+LICENSOR DOES NOT WARRANT THAT:
+  (a) The Software will meet your requirements
+  (b) The Software will be uninterrupted, timely, secure, or error-free
+  (c) Results obtained from use of the Software will be accurate or reliable
+  (d) Any errors in the Software will be corrected
+
+================================================================================
+7. LIMITATION OF LIABILITY
+================================================================================
+
+IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Maximum liability for Commercial License holders: Amount paid for license
+in the 12 months preceding the claim.
+
+================================================================================
+8. TERMINATION
+================================================================================
+
+8.1 AUTOMATIC TERMINATION
+This license terminates automatically if you:
+  (a) Violate any terms of this Agreement
+  (b) Use the Software commercially without a valid Commercial License
+  (c) Fail to pay Commercial License fees when due
+
+8.2 EFFECT OF TERMINATION
+Upon termination, you must:
+  (a) Cease all use of the Software immediately
+  (b) Delete all copies of the Software in your possession
+  (c) Certify destruction in writing if requested by Licensor
+
+8.3 SURVIVAL
+Sections 4 (Ownership), 6 (Warranty Disclaimer), 7 (Limitation of Liability),
+and 9 (General) survive termination.
+
+================================================================================
+9. GENERAL
+================================================================================
+
+9.1 ENTIRE AGREEMENT
+This Agreement constitutes the entire agreement between you and Licensor
+concerning the Software and supersedes all prior agreements.
+
+9.2 AMENDMENTS
+Licensor may update this license. Continued use of the Software constitutes
+acceptance of the updated terms. Commercial License holders will be notified
+of material changes 30 days in advance.
+
+9.3 SEVERABILITY
+If any provision is found unenforceable, the remaining provisions remain in
+full force and effect.
+
+9.4 NO WAIVER
+Failure to enforce any right does not waive that right.
+
+9.5 GOVERNING LAW
+This Agreement is governed by the laws of Norway, without regard to conflict
+of law principles.
+
+9.6 CONTACT INFORMATION
+For licensing questions or to purchase a Commercial License:
+  Email: estromsnes@gmail.com
+  Website: https://nofuzz.no/gs1-toolkit
+
+================================================================================
+
+BY USING THE SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT,
+UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.
+
+IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SOFTWARE.
+
+================================================================================
