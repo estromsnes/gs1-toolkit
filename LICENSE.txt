@@ -1,0 +1,19 @@
+GS1 Toolkit – License
+
+Copyright (c) 2026 Espen Strømsnes
+
+This software is free to use for:
+
+Non-commercial use
+Open source projects
+Evaluation and testing
+Commercial use requires a paid license.
+
+Commercial use includes, but is not limited to:
+
+Use in proprietary software
+Use in internal business systems
+Use in paid services or products
+To obtain a commercial license, contact: estromsnes@gmail.com
+
+Unauthorized commercial use is prohibited.
