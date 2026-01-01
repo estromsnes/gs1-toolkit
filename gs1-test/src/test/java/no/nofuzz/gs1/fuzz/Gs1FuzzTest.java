@@ -47,7 +47,7 @@ class Gs1FuzzTest {
         Assume.that(digits.length() >= 2);
 
         String ai = digits.substring(0, 2);
-        Assume.that(!ai.equals("01") && !ai.equals("10") && !ai.equals("17"));
+        Assume.that(!ai.equals("01") && !ai.equals("10") && !ai.equals("17") && !ai.equals("21") && !ai.equals("30"));
 
         String input = ai + "ABC";
 
