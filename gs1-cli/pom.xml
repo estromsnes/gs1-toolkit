@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="
+           http://maven.apache.org/POM/4.0.0
+           http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>no.nofuzz.gs1</groupId>
+    <artifactId>gs1-toolkit</artifactId>
+    <version>0.1.0</version>
+  </parent>
+
+  <artifactId>gs1-cli</artifactId>
+  <packaging>jar</packaging>
+
+  <name>GS1 Toolkit – CLI</name>
+  <description>Command-line interface for GS1 Toolkit</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>no.nofuzz.gs1</groupId>
+      <artifactId>gs1-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>3.5.1</version>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+          <configuration>
+            <createDependencyReducedPom>false</createDependencyReducedPom>
+            <transformers>
+              <transformer
+                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <mainClass>no.nofuzz.gs1.cli.Gs1Cli</mainClass>
+              </transformer>
+            </transformers>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+
+<!--
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>no.nofuzz.gs1.cli.Gs1Cli</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+	  
+    </plugins>
+  </build>-->
+
+</project>

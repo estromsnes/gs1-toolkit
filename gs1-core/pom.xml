@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="
+           http://maven.apache.org/POM/4.0.0
+           http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>no.nofuzz.gs1</groupId>
+    <artifactId>gs1-toolkit</artifactId>
+    <version>0.1.0</version>
+  </parent>
+
+  <artifactId>gs1-core</artifactId>
+  <packaging>jar</packaging>
+
+  <name>GS1 Toolkit – Core</name>
+  <description>Core GS1 parsing library (GS1-128 and DataMatrix)</description>
+
+  <dependencies>
+    <!-- Intentionally empty: no runtime dependencies -->
+  </dependencies>
+
+</project>

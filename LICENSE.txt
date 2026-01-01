@@ -1,6 +1,6 @@
 GS1 Toolkit – License
 
-Copyright (c) 2026 Espen Strømsnes
+Copyright (c) 2026 No Fuzz Strømsnes
 
 This software is free to use for:
 

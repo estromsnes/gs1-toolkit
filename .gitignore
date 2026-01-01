@@ -1,11 +1,23 @@
 # Compiled class file
 *.class
 
+# Build folder
+target
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
 # Log file
 *.log
 
 # BlueJ files
 *.ctxt
+
+# JQWik database file
+.jqwik-database
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
