@@ -444,14 +444,73 @@ Error codes:
 
 ### Custom Parser Configuration
 
-**Using the Builder Pattern (Recommended):**
+**Minimal Parser with Specific AIs:**
+
+This example shows how to create a parser supporting only GTIN (01), Length (3110), and Batch/Lot (10):
+
+```java
+import no.nofuzz.gs1.parser.Gs1Parser;
+import no.nofuzz.gs1.model.Gs1ComplianceMode;
+import no.nofuzz.gs1.ai.*;
+import java.util.Map;
+
+// Create parser with only 3 specific AIs
+AiRegistry customRegistry = new AiRegistry(Map.of(
+    // AI 01: GTIN - 14 digits fixed, numeric, with check digit validation
+    "01", new ApplicationIdentifier(
+        "01",                      // AI code
+        14,                        // Fixed length: 14 digits
+        14,                        // Max length: 14 digits
+        false,                     // Not variable length
+        CharacterSet.NUMERIC,      // Numeric only
+        true,                      // Validate check digit (in STRICT mode)
+        v -> v                     // Return value as-is
+    ),
+
+    // AI 3110: Length in meters (0 decimals) - 6 digits fixed, numeric
+    "3110", new ApplicationIdentifier(
+        "3110",                    // AI code
+        6,                         // Fixed length: 6 digits
+        6,                         // Max length: 6 digits
+        false,                     // Not variable length
+        CharacterSet.NUMERIC,      // Numeric only
+        false,                     // No check digit
+        v -> v.replaceFirst("^0+(?!$)", "")  // Strip leading zeros
+    ),
+
+    // AI 10: Batch/Lot Number - variable length, alphanumeric
+    "10", new ApplicationIdentifier(
+        "10",                      // AI code
+        null,                      // No fixed length
+        20,                        // Max length: 20 chars
+        true,                      // Variable length
+        CharacterSet.ALPHANUMERIC, // Alphanumeric
+        false,                     // No check digit
+        v -> v                     // Return value as-is
+    )
+));
+
+// Create parser in LENIENT mode
+Gs1Parser parser = new Gs1Parser(customRegistry, Gs1ComplianceMode.LENIENT);
+
+// Use the custom parser
+Gs1Result result = parser.parse("(01)09501101530003(3110)005000(10)BATCH42");
+String gtin = (String) result.getOrThrow("01");      // "09501101530003"
+String length = (String) result.getOrThrow("3110");  // "5000" (meters)
+String batch = (String) result.getOrThrow("10");     // "BATCH42"
+
+// This parser will reject unknown AIs
+parser.parse("(17)251231");  // ❌ Throws Gs1ParseException: Unknown AI 17
+```
+
+**Using the Builder Pattern (Add to Standard AIs):**
 
 ```java
 import no.nofuzz.gs1.parser.Gs1Parser;
 import no.nofuzz.gs1.model.Gs1ComplianceMode;
 import no.nofuzz.gs1.ai.*;
 
-// Create custom parser with builder
+// Start with standard AIs and add custom ones
 Gs1Parser parser = Gs1Parser.builder()
     .mode(Gs1ComplianceMode.STRICT)
     .registerAi("99", new ApplicationIdentifier(
@@ -465,24 +524,34 @@ Gs1Parser parser = Gs1Parser.builder()
     ))
     .build();
 
-// Or start without standard AIs
-Gs1Parser customParser = Gs1Parser.builder()
+// Or start fresh without standard AIs
+Gs1Parser minimalParser = Gs1Parser.builder()
     .withoutStandardAis()
-    .registerAi("99", customAiDefinition)
+    .registerAi("01", gtinDefinition)
+    .registerAi("10", batchDefinition)
     .build();
 ```
 
-**Direct Construction (Advanced):**
+**Understanding AI Specifications:**
 
-```java
-// Create custom AI registry from scratch
-AiRegistry custom = new AiRegistry(Map.of(
-    "01", new ApplicationIdentifier("01", 14, 14, false, CharacterSet.NUMERIC, true, v -> v),
-    "99", new ApplicationIdentifier("99", null, 10, true, CharacterSet.ALPHANUMERIC, false, v -> v.toUpperCase())
-));
+| Parameter | Description | Example Values |
+|-----------|-------------|----------------|
+| `code` | AI identifier | `"01"`, `"10"`, `"3110"` |
+| `fixedLength` | Exact length (or `null` if variable) | `14`, `6`, `null` |
+| `maxLength` | Maximum allowed length | `14`, `20`, `30` |
+| `isVariable` | Whether AI has variable length | `false` (fixed), `true` (variable) |
+| `characterSet` | Allowed characters | `NUMERIC`, `ALPHANUMERIC` |
+| `validateCheckDigit` | Enable check digit validation (STRICT mode) | `true`, `false` |
+| `valueParser` | Function to transform value | `v -> v`, `v -> v.toUpperCase()` |
 
-Gs1Parser parser = new Gs1Parser(custom, Gs1ComplianceMode.LENIENT);
-```
+**Variable Measure AIs (3100-3365 series):**
+
+For variable measure AIs like 3110 (length), 3102 (weight with 2 decimals), etc., the last digit of the AI code indicates decimal places:
+- `3110` = 0 decimals → "005000" becomes "5000"
+- `3111` = 1 decimal → "005000" becomes "500.0"
+- `3112` = 2 decimals → "005000" becomes "50.00"
+
+Use `StandardAis.parseVariableMeasure(aiCode, value)` for proper formatting, or implement custom logic.
 
 **Thread Safety Note:**
 - `Gs1Parser` instances are **immutable and thread-safe**
