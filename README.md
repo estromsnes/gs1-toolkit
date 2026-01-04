@@ -8,6 +8,8 @@
 
 A battle-tested Java library for parsing GS1-128 and DataMatrix barcodes into structured, type-safe data.
 
+**What is GS1?** [GS1](https://www.gs1.org/) is a global standards organization that develops and maintains barcode standards used across retail, healthcare, logistics, and supply chain industries. GS1 standards enable products to be uniquely identified and tracked worldwide through formats like GTINs (product identifiers), SSCCs (shipping containers), and Application Identifiers (structured data fields in barcodes).
+
 **Why developers choose GS1 Toolkit:**
 - **Fast**: 1.1-1.6 million parses/second (JMH verified), single-pass, zero regex
 - **Safe**: No exceptions leak, handles malformed input gracefully
@@ -138,16 +140,58 @@ Built for developers tired of:
 
 ---
 
+## GS1 Standards & Resources
+
+This library implements the official GS1 standards for barcode encoding and Application Identifiers.
+
+### Official GS1 Documentation
+
+**GS1 Organization:**
+- [GS1 Homepage](https://www.gs1.org/) - Global standards organization
+- [GS1 General Specifications](https://www.gs1.org/standards/barcodes-epcrfid-id-keys/gs1-general-specifications) - Complete technical documentation
+- [GS1 Standards Document](https://www.gs1.org/docs/barcodes/GS1_General_Specifications.pdf) - PDF specification (registration required)
+
+**Application Identifiers:**
+- [GS1 Application Identifier Reference](https://ref.gs1.org/ai/) - Official AI registry and lookup tool
+- [AI Finder Tool](https://www.gs1.org/services/check-digit-calculator) - Interactive AI search and validation
+
+**Barcode Formats:**
+- [GS1-128 Specification](https://www.gs1.org/standards/barcodes/ean-upc) - Linear barcode format (formerly UCC/EAN-128)
+- [GS1 DataMatrix](https://www.gs1.org/standards/gs1-datamatrix) - 2D barcode format specification
+- [GS1 Digital Link](https://www.gs1.org/standards/gs1-digital-link) - Web-based GS1 identifiers
+
+**Key Identifier Standards:**
+- [GTIN (Global Trade Item Number)](https://www.gs1.org/standards/id-keys/gtin) - Product identification
+- [GLN (Global Location Number)](https://www.gs1.org/standards/id-keys/gln) - Location/party identification
+- [SSCC (Serial Shipping Container Code)](https://www.gs1.org/standards/id-keys/sscc) - Logistics unit identification
+
+### Industry Resources
+
+**Getting Started with GS1:**
+- [GS1 Company Prefix](https://www.gs1.org/standards/id-keys/company-prefix) - How to obtain your GS1 prefix
+- [Barcode Basics](https://www.gs1.org/standards/barcodes/barcode-basics) - Introduction to GS1 barcodes
+- [Implementation Guidelines](https://www.gs1.org/standards/implementation-guidelines) - Industry-specific guides
+
+**Tools & Calculators:**
+- [Check Digit Calculator](https://www.gs1.org/services/check-digit-calculator) - GTIN/GLN validation tool
+- [Barcode Generator](https://www.gs1.org/services/barcode-generator) - Create test barcodes
+
+**Note:** This library is an independent implementation and is not affiliated with or endorsed by GS1. All trademarks are property of their respective owners.
+
+---
+
 ## Features
 
 ### Format Support
 
-**GS1-128 (AI)value Syntax**
+**[GS1-128](https://www.gs1.org/standards/barcodes/ean-upc) (AI)value Syntax**
+- Linear 1D barcode format (formerly UCC/EAN-128)
 - Human-readable format: `(01)09501101530003(17)251231`
 - Automatic format detection
 - Mixed fixed and variable-length AIs
 
-**GS1 DataMatrix (FNC1-based)**
+**[GS1 DataMatrix](https://www.gs1.org/standards/gs1-datamatrix) (FNC1-based)**
+- 2D matrix barcode format
 - Binary FNC1 separators (char 29)
 - Optional leading FNC1 (in LENIENT mode)
 - Ambiguous AI detection (prevents `10ABC17` being parsed incorrectly)
@@ -205,7 +249,9 @@ Suitable for:
 
 ### Supported Application Identifiers
 
-Currently supports **172 Application Identifiers** covering retail, food, pharma, logistics, and supply chain industries:
+Currently supports **172 Application Identifiers** covering retail, food, pharma, logistics, and supply chain industries.
+
+For the complete official AI registry, see [GS1 Application Identifier Reference](https://ref.gs1.org/ai/).
 
 **Core Identifiers:**
 - **00**: SSCC - Serial Shipping Container Code (18 digits, fixed)
@@ -527,10 +573,12 @@ public class ComplianceValidator {
 ## Contributing
 
 Contributions welcome! Areas we'd love help with:
-- Additional Application Identifiers
-- More test cases (especially edge cases from real scanners)
-- Documentation improvements
-- Performance optimizations
+- **Additional Application Identifiers** - Check the [official GS1 AI registry](https://ref.gs1.org/ai/) for AIs not yet implemented
+- **More test cases** - Especially edge cases from real scanners and production data
+- **Documentation improvements** - Examples, tutorials, industry-specific guides
+- **Performance optimizations** - Profiling results and optimization PRs welcome
+
+**Before contributing AIs:** Please verify against the [GS1 General Specifications](https://www.gs1.org/standards/barcodes-epcrfid-id-keys/gs1-general-specifications) to ensure correctness.
 
 See issues for current priorities.
 
