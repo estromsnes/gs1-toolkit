@@ -205,22 +205,44 @@ Suitable for:
 
 ### Supported Application Identifiers
 
-Currently supports 13 common AIs:
-- **01**: GTIN (14 digits, fixed) - ✅ **Check digit validated in STRICT mode**
-- **10**: Batch/Lot Number (variable, max 20)
-- **11**: Production date (YYMMDD, parsed as `LocalDate`)
-- **13**: Packaging date (YYMMDD, parsed as `LocalDate`)
-- **15**: Best before date (YYMMDD, parsed as `LocalDate`)
+Currently supports **54 common AIs** including:
+
+**Core Identifiers:**
+- **00**: SSCC - Serial Shipping Container Code (18 digits, fixed)
+- **01**: GTIN - Global Trade Item Number (14 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **02**: GTIN of Contained Trade Items (14 digits, fixed)
+
+**Dates:**
+- **11**: Production Date (YYMMDD, parsed as `LocalDate`)
+- **12**: Due Date (YYMMDD, parsed as `LocalDate`)
+- **13**: Packaging Date (YYMMDD, parsed as `LocalDate`)
+- **15**: Best Before Date (YYMMDD, parsed as `LocalDate`)
+- **16**: Sell By Date (YYMMDD, parsed as `LocalDate`)
 - **17**: Expiry Date (YYMMDD, parsed as `LocalDate`)
+
+**Product Information:**
+- **10**: Batch/Lot Number (variable, max 20)
 - **20**: Product Variant (2 digits, fixed)
 - **21**: Serial Number (variable, max 20)
-- **30**: Count (variable, max 8, parsed as `Integer`)
+- **30**: Variable Count (variable, max 8, parsed as `Integer`)
 - **37**: Count of Trade Items (variable, max 8, parsed as `Integer`)
-- **400**: Customer Purchase Order (variable, max 30)
-- **410**: Ship to GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
-- **411**: Bill to GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+
+**Locations & Parties:**
+- **400**: Customer Purchase Order Number (variable, max 30)
+- **410**: Ship To / Deliver To GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **411**: Bill To / Invoice To GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
 - **420**: Ship To Postal Code (variable, max 20)
-- **710**: NHRN (variable, max 20)
+- **710**: National Healthcare Reimbursement Number (variable, max 20)
+
+**Variable Measure Trade Items:**
+- **3100-3105**: Net Weight in kilograms (6 digits, 0-5 decimal places)
+- **3110-3115**: Length/Distance in meters (6 digits, 0-5 decimal places)
+- **3200-3205**: Net Weight in pounds (6 digits, 0-5 decimal places)
+- **3210-3215**: Length in inches (6 digits, 0-5 decimal places)
+- **3220-3225**: Length in feet (6 digits, 0-5 decimal places)
+- **3300-3305**: Gross Weight in kilograms (logistics) (6 digits, 0-5 decimal places)
+
+*Variable measure AIs use implied decimal places based on the last digit of the AI code.*
 
 **Check Digit Validation:**
 - In STRICT mode, GTIN (AI 01) and GLN (AI 410/411) check digits are validated using GS1 modulo-10 algorithm
@@ -429,9 +451,10 @@ public class ComplianceValidator {
 ## Project Status
 
 - **Production-ready** core parser
-- **Comprehensive tests**: unit, integration, fuzz, regression
+- **Comprehensive tests**: 81 tests including unit, integration, fuzz, and regression tests
 - **Battle-tested** with real scanner data
-- **Limited AI coverage**: Common AIs implemented, extensible for more
+- **54 Application Identifiers** implemented covering retail, food, pharma, and logistics industries
+- **Variable measure support**: Weight and length in metric and imperial units
 - **Not yet published** to Maven Central (coming soon)
 
 ---
