@@ -563,6 +563,103 @@ Use `StandardAis.parseVariableMeasure(aiCode, value)` for proper formatting, or 
 
 ## Real-World Examples
 
+### Product Scanner with Optional Length Data
+
+This example shows how to parse GTIN (required) and optionally extract length specifications if present:
+
+```java
+import no.nofuzz.gs1.parser.Gs1Parser;
+import no.nofuzz.gs1.model.Gs1Result;
+import no.nofuzz.gs1.ai.*;
+import java.util.Map;
+import java.util.Optional;
+
+public class ProductScanner {
+    private final Gs1Parser parser;
+
+    public ProductScanner() {
+        // Create parser supporting GTIN (01) and all length AIs (3110-3115)
+        AiRegistry registry = new AiRegistry(Map.of(
+            // AI 01: GTIN (required)
+            "01", new ApplicationIdentifier(
+                "01", 14, 14, false, CharacterSet.NUMERIC, true, v -> v
+            ),
+
+            // Length in meters with 0-5 decimal places (optional)
+            "3110", new ApplicationIdentifier(
+                "3110", 6, 6, false, CharacterSet.NUMERIC, false,
+                v -> v.replaceFirst("^0+(?!$)", "")
+            ),
+            "3111", new ApplicationIdentifier(
+                "3111", 6, 6, false, CharacterSet.NUMERIC, false,
+                v -> StandardAis.parseVariableMeasure("3111", v)
+            ),
+            "3112", new ApplicationIdentifier(
+                "3112", 6, 6, false, CharacterSet.NUMERIC, false,
+                v -> StandardAis.parseVariableMeasure("3112", v)
+            )
+            // ... add 3113-3115 as needed
+        ));
+
+        this.parser = new Gs1Parser(registry, Gs1ComplianceMode.LENIENT);
+    }
+
+    public ProductInfo scanProduct(String barcode) {
+        Gs1Result result = parser.parse(barcode);
+
+        // GTIN is required - throws if missing
+        String gtin = (String) result.getOrThrow("01");
+
+        // Length is optional - returns Optional<Object>
+        Optional<String> length = result.get("3110")
+            .or(() -> result.get("3111"))
+            .or(() -> result.get("3112"))
+            .map(obj -> (String) obj);
+
+        // Handle optional length data
+        if (length.isPresent()) {
+            return new ProductInfo(gtin, length.get() + " meters");
+        } else {
+            return new ProductInfo(gtin, "no length data");
+        }
+    }
+
+    // Alternative: Use the default parser (supports all 172 AIs)
+    public ProductInfo scanProductSimple(String barcode) {
+        Gs1Parser parser = Gs1Parser.defaultParser();
+        Gs1Result result = parser.parse(barcode);
+
+        // Required field
+        String gtin = (String) result.getOrThrow("01");
+
+        // Optional field with fallback
+        String length = (String) result.get("3110").orElse("not specified");
+
+        return new ProductInfo(gtin, length);
+    }
+
+    public static void main(String[] args) {
+        ProductScanner scanner = new ProductScanner();
+
+        // Barcode with GTIN and length
+        ProductInfo product1 = scanner.scanProduct("(01)09501101530003(3110)005000");
+        // Result: GTIN=09501101530003, Length=5000 meters
+
+        // Barcode with only GTIN
+        ProductInfo product2 = scanner.scanProduct("(01)09501101530003");
+        // Result: GTIN=09501101530003, Length=no length data
+    }
+}
+```
+
+**Key Patterns:**
+
+1. **Required fields**: Use `result.getOrThrow("01")` - throws exception if missing
+2. **Optional fields**: Use `result.get("3110")` - returns `Optional<Object>`
+3. **Fallback values**: Use `result.get("3110").orElse("default")`
+4. **Check existence**: Use `result.contains("3110")` - returns boolean
+5. **Multiple optional fields**: Chain `.or()` to try multiple AIs
+
 ### Warehouse Scanner Integration
 
 ```java
