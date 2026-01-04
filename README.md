@@ -205,16 +205,17 @@ Suitable for:
 
 ### Supported Application Identifiers
 
-Currently supports **54 common AIs** including:
+Currently supports **172 Application Identifiers** covering retail, food, pharma, logistics, and supply chain industries:
 
 **Core Identifiers:**
 - **00**: SSCC - Serial Shipping Container Code (18 digits, fixed)
 - **01**: GTIN - Global Trade Item Number (14 digits, fixed) - ✅ **Check digit validated in STRICT mode**
 - **02**: GTIN of Contained Trade Items (14 digits, fixed)
+- **03**: GTIN of Trade Items Contained in a Logistic Unit (14 digits, fixed)
 
 **Dates:**
 - **11**: Production Date (YYMMDD, parsed as `LocalDate`)
-- **12**: Due Date (YYMMDD, parsed as `LocalDate`)
+- **12**: Due Date for Payment (YYMMDD, parsed as `LocalDate`)
 - **13**: Packaging Date (YYMMDD, parsed as `LocalDate`)
 - **15**: Best Before Date (YYMMDD, parsed as `LocalDate`)
 - **16**: Sell By Date (YYMMDD, parsed as `LocalDate`)
@@ -224,28 +225,91 @@ Currently supports **54 common AIs** including:
 - **10**: Batch/Lot Number (variable, max 20)
 - **20**: Product Variant (2 digits, fixed)
 - **21**: Serial Number (variable, max 20)
+- **22**: Consumer Product Variant (variable, max 20)
 - **30**: Variable Count (variable, max 8, parsed as `Integer`)
 - **37**: Count of Trade Items (variable, max 8, parsed as `Integer`)
 
-**Locations & Parties:**
+**Custom Product Identification:**
+- **235**: Third Party Controlled Extension (variable, max 28)
+- **240**: Additional Product Identification (variable, max 30)
+- **241**: Customer Part Number (variable, max 30)
+- **242**: Made-to-Order Variation Number (variable, max 6)
+- **243**: Packaging Component Number (variable, max 20)
+- **250**: Secondary Serial Number (variable, max 30)
+- **251**: Reference to Source Entity (variable, max 30)
+- **254**: GLN Extension Component (variable, max 20)
+
+**Locations & Parties (GLN):**
 - **400**: Customer Purchase Order Number (variable, max 30)
 - **410**: Ship To / Deliver To GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
 - **411**: Bill To / Invoice To GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **412**: Purchased From GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **413**: Ship For / Deliver For / Forward To GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **414**: Identification of Physical Location GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **415**: Invoicing Party GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
+- **416**: Production or Service Location GLN (13 digits, fixed) - ✅ **Check digit validated in STRICT mode**
 - **420**: Ship To Postal Code (variable, max 20)
 - **710**: National Healthcare Reimbursement Number (variable, max 20)
 
-**Variable Measure Trade Items:**
-- **3100-3105**: Net Weight in kilograms (6 digits, 0-5 decimal places)
-- **3110-3115**: Length/Distance in meters (6 digits, 0-5 decimal places)
-- **3200-3205**: Net Weight in pounds (6 digits, 0-5 decimal places)
-- **3210-3215**: Length in inches (6 digits, 0-5 decimal places)
-- **3220-3225**: Length in feet (6 digits, 0-5 decimal places)
-- **3300-3305**: Gross Weight in kilograms (logistics) (6 digits, 0-5 decimal places)
+**Variable Measure Trade Items (Complete Coverage):**
 
-*Variable measure AIs use implied decimal places based on the last digit of the AI code.*
+*Weight (kg):*
+- **3100-3105**: Net Weight in kilograms (6 digits, 0-5 decimal places)
+- **3300-3305**: Gross Weight in kilograms - logistics (6 digits, 0-5 decimal places)
+
+*Weight (lb):*
+- **3200-3205**: Net Weight in pounds (6 digits, 0-5 decimal places)
+
+*Length (m):*
+- **3110-3115**: Length/Distance in meters (6 digits, 0-5 decimal places)
+- **3310-3315**: Length in meters - logistics (6 digits, 0-5 decimal places)
+
+*Length (in):*
+- **3210-3215**: Length in inches (6 digits, 0-5 decimal places)
+
+*Length (ft):*
+- **3220-3225**: Length in feet (6 digits, 0-5 decimal places)
+
+*Width (m):*
+- **3120-3125**: Width in meters (6 digits, 0-5 decimal places)
+- **3320-3325**: Width in meters - logistics (6 digits, 0-5 decimal places)
+
+*Width (in):*
+- **3240-3245**: Width in inches (6 digits, 0-5 decimal places)
+
+*Width (ft):*
+- **3250-3255**: Width in feet (6 digits, 0-5 decimal places)
+
+*Width (yd):*
+- **3260-3265**: Width in yards (6 digits, 0-5 decimal places)
+
+*Height (m):*
+- **3130-3135**: Height in meters (6 digits, 0-5 decimal places)
+- **3330-3335**: Height in meters - logistics (6 digits, 0-5 decimal places)
+
+*Height (in):*
+- **3270-3275**: Height in inches (6 digits, 0-5 decimal places)
+
+*Height (ft):*
+- **3280-3285**: Height in feet (6 digits, 0-5 decimal places)
+
+*Height (yd):*
+- **3290-3295**: Height in yards (6 digits, 0-5 decimal places)
+
+*Area (m²):*
+- **3140-3145**: Area in square meters (6 digits, 0-5 decimal places)
+- **3340-3345**: Area in square meters - logistics (6 digits, 0-5 decimal places)
+
+*Volume (L & m³):*
+- **3150-3155**: Net Volume in liters (6 digits, 0-5 decimal places)
+- **3160-3165**: Net Volume in cubic meters (6 digits, 0-5 decimal places)
+- **3350-3355**: Volume in liters - logistics (6 digits, 0-5 decimal places)
+- **3360-3365**: Volume in cubic meters - logistics (6 digits, 0-5 decimal places)
+
+*Variable measure AIs use implied decimal places based on the last digit of the AI code (0-5 decimals).*
 
 **Check Digit Validation:**
-- In STRICT mode, GTIN (AI 01) and GLN (AI 410/411) check digits are validated using GS1 modulo-10 algorithm
+- In STRICT mode, GTIN (AI 01, 02, 03) and GLN (AI 410-416) check digits are validated using GS1 modulo-10 algorithm
 - In LENIENT mode, check digits are not validated (accepts scanner data as-is)
 
 **Extensible:** Register custom AIs via builder pattern
@@ -451,10 +515,11 @@ public class ComplianceValidator {
 ## Project Status
 
 - **Production-ready** core parser
-- **Comprehensive tests**: 81 tests including unit, integration, fuzz, and regression tests
+- **Comprehensive tests**: 120 tests including unit, integration, fuzz, and regression tests
 - **Battle-tested** with real scanner data
-- **54 Application Identifiers** implemented covering retail, food, pharma, and logistics industries
-- **Variable measure support**: Weight and length in metric and imperial units
+- **172 Application Identifiers** implemented covering retail, food, pharma, and logistics industries
+- **Complete variable measure support**: Weight, length, width, height, area, and volume in metric and imperial units
+- **Full GLN support**: All location and party identification AIs (410-416) with check digit validation
 - **Not yet published** to Maven Central (coming soon)
 
 ---

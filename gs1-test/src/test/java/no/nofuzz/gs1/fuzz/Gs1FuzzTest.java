@@ -49,9 +49,11 @@ class Gs1FuzzTest {
         String ai = digits.substring(0, 2);  // Only check 2-digit AIs
 
         // Exclude all registered 2-digit AIs
-        Assume.that(!ai.equals("01") && !ai.equals("10") && !ai.equals("11") &&
-                    !ai.equals("13") && !ai.equals("15") && !ai.equals("17") &&
-                    !ai.equals("20") && !ai.equals("21") && !ai.equals("30") &&
+        Assume.that(!ai.equals("00") && !ai.equals("01") && !ai.equals("02") &&
+                    !ai.equals("03") && !ai.equals("10") && !ai.equals("11") &&
+                    !ai.equals("12") && !ai.equals("13") && !ai.equals("15") &&
+                    !ai.equals("16") && !ai.equals("17") && !ai.equals("20") &&
+                    !ai.equals("21") && !ai.equals("22") && !ai.equals("30") &&
                     !ai.equals("37"));
 
         String input = ai + "ABC";
