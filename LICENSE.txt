@@ -48,10 +48,7 @@ Commercial License. To obtain a Commercial License:
 
   Contact: estromsnes@gmail.com
   Subject: "GS1 Toolkit Business License"
-  Website: https://nofuzz.no/gs1-toolkit
-
-  Pricing: $1000/year per legal entity
-  (Volume discounts and multi-year agreements available)
+  Website: https://github.com/estromsnes/gs1-toolkit
 
 ================================================================================
 3. RESTRICTIONS

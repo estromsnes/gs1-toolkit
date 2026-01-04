@@ -9,11 +9,11 @@
 A battle-tested Java library for parsing GS1-128 and DataMatrix barcodes into structured, type-safe data.
 
 **Why developers choose GS1 Toolkit:**
-- 🚀 **Fast**: 1.1-1.6 million parses/second (JMH verified), single-pass, zero regex
-- 🛡️ **Safe**: No exceptions leak, handles malformed input gracefully
-- 🎯 **Practical**: Works with real-world scanner data, not just perfect specs
-- 📦 **Zero dependencies**: Pure Java, no bloat
-- 🔧 **Flexible**: LENIENT mode for production, STRICT for compliance
+- **Fast**: 1.1-1.6 million parses/second (JMH verified), single-pass, zero regex
+- **Safe**: No exceptions leak, handles malformed input gracefully
+- **Practical**: Works with real-world scanner data, not just perfect specs
+- **Zero dependencies**: Pure Java, no bloat
+- **Flexible**: LENIENT mode for production, STRICT for compliance
 
 ---
 
@@ -85,98 +85,32 @@ java -jar gs1-cli.jar parse "(01)09501101530003(17)251231(10)LOT123"
 
 ---
 
-## 📜 Licensing
+## Licensing
 
 ### **Free for Non-Commercial Use**
 
 GS1 Toolkit is **free** for:
-- ✅ Personal projects
-- ✅ Educational use (students, teachers, academic research)
-- ✅ Non-profit organizations
-- ✅ Open-source projects
-- ✅ Evaluation and proof-of-concept (60 days)
+- Personal projects
+- Educational use (students, teachers, academic research)
+- Non-profit organizations
+- Open-source projects
+- Evaluation and proof-of-concept (60 days)
 
 See [LICENSE.txt](LICENSE.txt) for complete terms.
 
 ### **Commercial License Required**
 
 A **commercial license is required** if you use GS1 Toolkit in:
-- 🏢 Production systems at for-profit companies
-- 💼 Internal business applications
-- 💰 Products or services that generate revenue
-- 🏭 Commercial software (SaaS, on-premise, embedded)
-
-### **Why a Commercial License?**
-
-**Your benefits:**
-- 💰 **Save $10K-$50K** vs building in-house
-- ⚡ **10x faster** than custom solutions
-- 🛡️ **Prevent costly errors** ($500K+ per recall)
-- ✅ **Production-proven** (millions of barcodes daily)
-- 📞 **Priority support** (24-hour response SLA)
-- 📋 **Compliance documentation** for audits
-
-**Our investment:**
-- Continuous development and maintenance
-- Security updates and bug fixes
-- Performance optimization
-- New features and AI additions
-- Comprehensive testing and quality assurance
-
-### **Pricing**
-
-| Edition       | Price          | Best For                          |
-|---------------|----------------|-----------------------------------|
-| **Community** | Free           | Personal, educational, evaluation |
-| **Business**  | **$1000/year** | Businesses                 |
-
-**Enterprise Edition includes:**
-- ✅ Commercial use license (unlimited projects)
-- ✅ Custom AI development
-- ✅ Integration assistance (5 hours/year)
-- ✅ Compliance documentation
-- ✅ Future updates included
-
-**60-day free trial available** - No credit card required
+- Production systems at for-profit companies
+- Internal business applications
+- Products or services that generate revenue
+- Commercial software (SaaS, on-premise, embedded)
 
 ### **How to Purchase**
 
-**Step 1: Contact Us**
+**Contact Us**
 - Email: estromsnes@gmail.com
 - Subject: "GS1 Toolkit Business License"
-
-**Step 2: Receive Quote**
-- We'll send you a customized quote
-- Multiple payment options available
-- Volume discounts for multiple entities
-
-**Step 3: Deploy**
-- Receive license key via email
-- Continue using the same library (no code changes)
-- Access to priority support portal
-
-### **FAQ**
-
-**Q: Do I need a license for development/testing?**
-A: No, you can use it freely for 60 days for evaluation. After that, you need a license for commercial environments.
-
-**Q: What counts as "one legal entity"?**
-A: One company (including all subsidiaries with >50% ownership). Separate legal entities need separate licenses.
-
-**Q: Can I use it in open-source projects?**
-A: Yes, if your project is non-commercial. If your open-source project is used commercially, end-users need licenses.
-
-**Q: What if I'm a consultant/contractor?**
-A: Your client (the end-user company) needs the license, not you individually.
-
-**Q: Do you offer startup discounts?**
-A: Yes, 50% off first year for companies under $1M annual revenue.
-
-**Q: What happens if I don't renew?**
-A: You can continue using the version you licensed, but won't receive updates or support.
-
-**Q: Can I negotiate pricing?**
-A: Yes, we offer volume discounts, multi-year discounts, and can discuss custom arrangements.
 
 ### **License Compliance**
 
@@ -194,11 +128,11 @@ Using GS1 Toolkit commercially without a license violates the license agreement 
 ## Why GS1 Toolkit?
 
 Built for developers tired of:
-- ❌ Unreadable regex spaghetti
-- ❌ Half-baked GS1 implementations that fail on real scanner data
-- ❌ Cryptic "invalid barcode" errors with no position info
-- ❌ Libraries that crash on malformed input
-- ❌ Choosing between "works in production" and "passes compliance tests"
+- Unreadable regex spaghetti
+- Half-baked GS1 implementations that fail on real scanner data
+- Cryptic "invalid barcode" errors with no position info
+- Libraries that crash on malformed input
+- Choosing between "works in production" and "passes compliance tests"
 
 **GS1 Toolkit gives you both:** LENIENT mode for real-world robustness, STRICT mode for compliance.
 
@@ -206,7 +140,7 @@ Built for developers tired of:
 
 ## Features
 
-### ✔️ Format Support
+### Format Support
 
 **GS1-128 (AI)value Syntax**
 - Human-readable format: `(01)09501101530003(17)251231`
@@ -218,7 +152,7 @@ Built for developers tired of:
 - Optional leading FNC1 (in LENIENT mode)
 - Ambiguous AI detection (prevents `10ABC17` being parsed incorrectly)
 
-### 🎛️ Dual Parsing Modes
+### Dual Parsing Modes
 
 | Feature | LENIENT (default) | STRICT |
 |---------|-------------------|--------|
@@ -230,7 +164,7 @@ Built for developers tired of:
 | Ambiguous input | ❌ Detected & rejected | ❌ Rejected |
 | **Best for** | Production systems | Compliance testing |
 
-### 🔒 Safety & Reliability
+### Safety & Reliability
 
 - **Thread-safe:** Parser instances are immutable - create once, reuse everywhere
 - **No exceptions leak:** All parse errors return `Gs1ParseException` with position info
@@ -239,7 +173,7 @@ Built for developers tired of:
 - **Type-safe results:** Dates parsed as `LocalDate`, counts as `Integer`
 - **DoS protection:** 10,000 character input limit prevents memory exhaustion
 
-### 🚀 Performance
+### Performance
 
 **Actual JMH Benchmark Results** (OpenJDK 21, single-threaded):
 
@@ -269,7 +203,7 @@ Suitable for:
 - High-throughput batch processing
 - Backend services (ERP, WMS, supply chain)
 
-### 📋 Supported Application Identifiers
+### Supported Application Identifiers
 
 Currently supports 13 common AIs:
 - **01**: GTIN (14 digits, fixed) - ✅ **Check digit validated in STRICT mode**
@@ -494,11 +428,11 @@ public class ComplianceValidator {
 
 ## Project Status
 
-- ✅ **Production-ready** core parser
-- ✅ **Comprehensive tests**: unit, integration, fuzz, regression
-- ✅ **Battle-tested** with real scanner data
-- 🚧 **Limited AI coverage**: Common AIs implemented, extensible for more
-- 📋 **Not yet published** to Maven Central (coming soon)
+- **Production-ready** core parser
+- **Comprehensive tests**: unit, integration, fuzz, regression
+- **Battle-tested** with real scanner data
+- **Limited AI coverage**: Common AIs implemented, extensible for more
+- **Not yet published** to Maven Central (coming soon)
 
 ---
 
